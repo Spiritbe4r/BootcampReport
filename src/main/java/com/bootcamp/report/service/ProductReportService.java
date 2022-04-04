@@ -1,15 +1,18 @@
 package com.bootcamp.report.service;
 
 
-import com.bootcamp.report.models.dto.AccountDto;
-import com.bootcamp.report.models.dto.ClientRequest;
-import com.bootcamp.report.models.dto.Credit;
-import com.bootcamp.report.models.dto.CreditCard;
+import com.bootcamp.report.models.dto.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ProductReportService {
 
+  Mono<ClientRequest> getClient(String clientIdNumber);
+  Flux<Credit> getCredit(String clientIdNumber);
+  Mono<CreditCard> getCreditCard(String clientIdNumber);
+  Mono<AccountDto> getAccount(String clientIdNumber);
+  Flux<CurrentAccount> getCurrentAccount(String clientIdNumber);
+  Mono<FixedTermAccount> getFixedTermAccount(String clientIdNumber);
 
 
 

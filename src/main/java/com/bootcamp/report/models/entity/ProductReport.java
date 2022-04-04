@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(value = "productReport")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -28,6 +30,8 @@ public class ProductReport {
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime operationDate = LocalDateTime.now();
+
+  private List<Object> products=new ArrayList<>();
 
   private ClientDTO client;
 

@@ -1,3 +1,9 @@
 spring:
   main:
     allow-bean-definition-overriding: true
+
+microservices-urls:
+  api-client: http://localhost:8095/api/client
+  api-credit: http://localhost:8095/api/credit
+  api-account: http://localhost:8095/api/account
+  api-creditcard: http://localhost:8095/api/creditcard
