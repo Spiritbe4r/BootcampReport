@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientTypeRequest {
+public class ClientType {
 
   private String name;
   private String code;

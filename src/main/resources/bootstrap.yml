@@ -1,11 +1,36 @@
 spring:
+
+  profiles:
+    active: prod
+
+
+---
+spring:
+
+  config:
+    activate:
+      on-profile: prod
+
+    mvc:
+      pathmatch:
+        matching-strategy: ant-path-matcher
+
+
+
+---
+spring:
   application:
     name: productreport-microservice
+
+
   config:
+    activate:
+      on-profile: dev
 
     import: optional:configserver:http://localhost:8888
-    fail-fast: true
-  profiles:
-    active: dev
+
+    mvc:
+      pathmatch:
+        matching-strategy: ant-path-matcher
 
 

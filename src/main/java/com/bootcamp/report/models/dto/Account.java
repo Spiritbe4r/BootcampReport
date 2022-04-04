@@ -1,22 +1,28 @@
 package com.bootcamp.report.models.dto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class CurrentAccount {
-  private String typeOfAccount;
+@NoArgsConstructor
+@Builder
+public class Account {
 
   private String accountNumber;
 
+  private String typeOfAccount;
+
   private double amount;
+
+  private String currency;
+
+  private int movementPerMonth;
 
   private int maxLimitMovementPerMonth;
 
-  private int movementPerMonth;
+
 }

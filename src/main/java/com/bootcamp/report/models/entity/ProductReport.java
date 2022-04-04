@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(value = "productReport")
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
@@ -27,9 +27,6 @@ public class ProductReport {
 
   @Id
   private String id;
-
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime operationDate = LocalDateTime.now();
 
   private List<Object> products=new ArrayList<>();
 

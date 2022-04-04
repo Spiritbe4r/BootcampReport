@@ -13,5 +13,5 @@ public class ClientRequest {
   private String name;
   private String clientIdNumber;
   private String clientIdType;
-  private ClientTypeRequest clientType;
+  private ClientType clientType;
 }

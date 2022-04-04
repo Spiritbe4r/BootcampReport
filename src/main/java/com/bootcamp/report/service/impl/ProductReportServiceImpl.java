@@ -2,17 +2,11 @@ package com.bootcamp.report.service.impl;
 
 
 import com.bootcamp.report.models.dto.*;
-import com.bootcamp.report.models.entity.ProductReport;
-import com.bootcamp.report.repository.ProductReportRepository;
 import com.bootcamp.report.service.ProductReportService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -42,12 +36,22 @@ public class ProductReportServiceImpl implements ProductReportService{
   @Value("${microservices-urls.api-account}")
   private String apiAccount;
 
+  @Value("${microservices-urls.api-currentAcc}")
+  private String apiCurrentaccount;
+
+  @Value("${microservices-urls.api-fixedtermsAcc}")
+  private String apiFixedTermsaccount;
+
   @Override
   public Mono<ClientRequest> getClient(String clientIdNumber) {
+    Map<String, Object> params = new HashMap<>();
+    LOGGER.info("initializing client query");
+    params.put("clientIdNumber", clientIdNumber);
     return webClientBuilder.baseUrl(apiClient)
           .build()
           .get()
-          .uri("/findClientCredit/{clientIdNumber}")
+          .uri("/findClientCredit/{clientIdNumber}", clientIdNumber)
+          .accept(MediaType.APPLICATION_JSON)
           .exchangeToMono(clientResponse -> clientResponse.bodyToMono(ClientRequest.class))
           .doOnNext(c->LOGGER.info("Client "+ c.getName()));
   }
@@ -84,7 +88,7 @@ public class ProductReportServiceImpl implements ProductReportService{
   }
 
   @Override
-  public Mono<AccountDto> getAccount(String clientIdNumber) {
+  public Mono<Account> getAccount(String clientIdNumber) {
     Map<String,Object>params=new HashMap<>();
     LOGGER.info("Searching CreditCard by: {}" + clientIdNumber);
     params.put("clientIdNumber", clientIdNumber);
@@ -93,20 +97,40 @@ public class ProductReportServiceImpl implements ProductReportService{
           .get()
           .uri("/client/{clientIdNumber}", clientIdNumber)
           .accept(MediaType.APPLICATION_JSON)
-          .exchangeToMono(clientResponse -> clientResponse.bodyToMono(AccountDto.class))
-          .switchIfEmpty(Mono.just(AccountDto.builder().accountNumber(null).build()))
+          .exchangeToMono(clientResponse -> clientResponse.bodyToMono(Account.class))
+          .switchIfEmpty(Mono.just(Account.builder().accountNumber(null).build()))
           .doOnNext(c -> LOGGER.info("Account Response: Account={}", c.getAccountNumber()));
 
   }
 
   @Override
-  public Flux<CurrentAccount> getCurrentAccount(String clientIdNumber) {
-    return null;
+  public Flux<Current> getCurrentAccount(String clientIdNumber) {
+    Map<String, Object> params = new HashMap<>();
+    LOGGER.info("Searching CurrentAccount by: {}" + clientIdNumber);
+    params.put("clientIdNumber", clientIdNumber);
+    return webClientBuilder.baseUrl(apiCurrentaccount)
+          .build()
+          .get()
+          .uri("/{clientIdNumber}", clientIdNumber)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchangeToFlux(clientResponse -> clientResponse.bodyToFlux(Current.class))
+          .switchIfEmpty(Mono.just(Current.builder().accountNumber(null).build()))
+          .doOnNext(c -> LOGGER.info("CurrentAccount Response: CurrentAccount={}", c.getAccountNumber()));
   }
 
   @Override
   public Mono<FixedTermAccount> getFixedTermAccount(String clientIdNumber) {
-    return null;
+    Map<String, Object> params = new HashMap<>();
+    LOGGER.info("Searching FixedTermAccount by: {}" + clientIdNumber);
+    params.put("clientIdNumber", clientIdNumber);
+    return webClientBuilder.baseUrl(apiFixedTermsaccount)
+          .build()
+          .get()
+          .uri("/{clientIdNumber}", clientIdNumber)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchangeToMono(clientResponse -> clientResponse.bodyToMono(FixedTermAccount.class))
+          .switchIfEmpty(Mono.just(FixedTermAccount.builder().accountNumber(null).build()))
+          .doOnNext(c -> LOGGER.info("FixedTermAccount Response: FixedTermAccount={}", c.getAccountNumber()));
   }
 
 
