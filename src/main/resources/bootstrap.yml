@@ -26,7 +26,7 @@ microservices-urls:
 ---
 spring:
   application:
-    name: productreport-microservice
+    name: report-microservice
 
 
   config:
